@@ -1,3 +1,5 @@
+package manager;
+
 import javax.swing.*;
 import java.awt.*;
 

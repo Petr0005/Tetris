@@ -1,3 +1,5 @@
+package manager;
+
 import mino.Block;
 import mino.Mino;
 import mino.Mino_L1;
@@ -18,6 +20,9 @@ public class PlayManager {
     Mino currentMino;
     final int MINO_START_X;
     final int MINO_START_Y;
+
+    // Others
+    public static int dropInterval = 60; // mino drops in every 60 frames
 
     public PlayManager() {
         left_x = (GamePanel.WIDTH/2) - (WIDTH/2);
