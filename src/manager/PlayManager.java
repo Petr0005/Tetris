@@ -1,10 +1,9 @@
 package manager;
 
-import mino.Block;
-import mino.Mino;
-import mino.Mino_L1;
+import mino.*;
 
 import java.awt.*;
+import java.util.Random;
 
 public class PlayManager {
     // Main Play Area
@@ -34,8 +33,28 @@ public class PlayManager {
         MINO_START_Y = top_y + Block.SIZE;
 
         // Set the starting Mino
-        currentMino = new Mino_L1();
+        currentMino = pickMino();
         currentMino.setXY(MINO_START_X, MINO_START_Y);
+    }
+
+    private Mino pickMino() {
+
+        // Pick a random mino
+        Mino mino = null;
+        int i = new Random().nextInt(7);
+
+        mino = switch (i) {
+            case 0 -> new Mino_L1();
+            case 1 -> new Mino_L2();
+            case 2 -> new Mino_Square();
+            case 3 -> new Mino_Bar();
+            case 4 -> new Mino_T();
+            case 5 -> new Mino_Z1();
+            case 6 -> new Mino_Z2();
+            default -> mino;
+        };
+
+        return mino;
     }
 
     public void update() {
