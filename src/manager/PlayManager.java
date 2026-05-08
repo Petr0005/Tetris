@@ -3,6 +3,7 @@ package manager;
 import mino.*;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class PlayManager {
@@ -19,6 +20,10 @@ public class PlayManager {
     Mino currentMino;
     final int MINO_START_X;
     final int MINO_START_Y;
+    Mino nextMino;
+    final int NEXT_MINO_X;
+    final int NEXT_MINO_Y;
+    public static ArrayList<Block> staticBlocks = new ArrayList<>();
 
     // Others
     public static int dropInterval = 60; // mino drops in every 60 frames
@@ -32,9 +37,15 @@ public class PlayManager {
         MINO_START_X = left_x + (WIDTH/2) - Block.SIZE;
         MINO_START_Y = top_y + Block.SIZE;
 
+        NEXT_MINO_X = right_x + 175;
+        NEXT_MINO_Y = top_y + 500;
+
         // Set the starting Mino
         currentMino = pickMino();
         currentMino.setXY(MINO_START_X, MINO_START_Y);
+
+        nextMino = pickMino();
+        nextMino.setXY(NEXT_MINO_X, NEXT_MINO_Y);
     }
 
     private Mino pickMino() {
@@ -58,7 +69,23 @@ public class PlayManager {
     }
 
     public void update() {
-        currentMino.update();
+        // Check if the currentMino is active
+        if (!currentMino.active) {
+            // If the mino is not active, put it into the staticBlocks
+            staticBlocks.add(currentMino.b[0]);
+            staticBlocks.add(currentMino.b[1]);
+            staticBlocks.add(currentMino.b[2]);
+            staticBlocks.add(currentMino.b[3]);
+
+            // replace the currentMino with the nextMino
+            currentMino = nextMino;
+            currentMino.setXY(MINO_START_X, MINO_START_Y);
+            nextMino = pickMino();
+            nextMino.setXY(NEXT_MINO_X, NEXT_MINO_Y);
+        } else {
+            currentMino.update();
+        }
+
     }
 
     public void draw(Graphics2D g2) {
@@ -79,6 +106,14 @@ public class PlayManager {
         // Draw the currentMino
         if (currentMino != null) {
             currentMino.draw(g2);
+        }
+
+        // Draw the nextMino
+        nextMino.draw(g2);
+
+        //Draw static blocks
+        for (Block staticBlock : staticBlocks) {
+            staticBlock.draw(g2);
         }
 
         // Draw Pause
